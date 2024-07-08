@@ -1,14 +1,14 @@
 package postgres
 
 import (
-	"testing"
 	pb "reservation/genproto/reservation"
+	"testing"
 
 	_ "github.com/lib/pq"
 )
 
 func TestCreateRestaurant(t *testing.T) {
-	db,err := ConnectDB()
+	db, err := ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
@@ -19,7 +19,7 @@ func TestCreateRestaurant(t *testing.T) {
 	restaurant := &pb.Restuarant{
 		Name:        "Test Restaurant",
 		Address:     "123 Test St",
-		Phone: "1234567890",
+		Phone:       "1234567890",
 		Description: "A place to test",
 	}
 
