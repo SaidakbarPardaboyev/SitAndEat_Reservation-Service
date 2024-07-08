@@ -5,15 +5,23 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
+
+	"database/sql"
+	"log"
 )
 
-func TestCreateRestaurant(t *testing.T) {
+func Connect() *sql.DB {
 	db, err := ConnectDB()
 	if err != nil {
-		t.Error(err)
+		log.Fatal("Connect error?")
 	}
 	defer db.Close()
 
+	return db
+}
+
+func TestCreateRestaurant(t *testing.T) {
+	db:= Connect()
 	repo := NewRestaurantRepo(db)
 
 	restaurant := &pb.Restuarant{
@@ -31,19 +39,16 @@ func TestCreateRestaurant(t *testing.T) {
 	if !status.Status {
 		t.Errorf("Expected status true, got false")
 	}
+	
 }
-func TestGetAllRestaurants(t *testing.T) {
-	db, err := ConnectDB()
 
-	if err != nil {
-		t.Error(err)
-	}
-	defer db.Close()
+func TestGetAllRestaurants(t *testing.T) {
+	db := Connect()
 
 	repo := NewRestaurantRepo(db)
-	_, err = repo.GetAllRestaurants()
+	_, err := repo.GetAllRestaurants(&pb.AllRestuarant{})
 	if err != nil {
 		t.Fatalf("Failed to get all restaurants: %v", err)
 	}
-	// TODO:
+
 }

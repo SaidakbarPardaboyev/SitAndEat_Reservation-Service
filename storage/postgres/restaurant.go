@@ -86,23 +86,48 @@ func(R *NewRestaurant) DeleteRestuarant(id *pb.RestuanantId)(*pb.Status, error){
 
 
 func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restuarant) (*pb.Status, error) {
-	_, err := r.Db.Exec("INSERT INTO restaurants (name, address, phone_number, description) VALUES ($1, $2, $3, $4)",
-		restaurant.Name, restaurant.Address, restaurant.Phone, restaurant.Description)
+	_, err := r.Db.Exec(`INSERT INTO 
+						restaurants(
+							name, 
+							address, 
+							phone_number, 
+							description) 
+						VALUES ($1, $2, $3, $4)`,
+							restaurant.Name, 
+							restaurant.Address, 
+							restaurant.Phone, 
+							restaurant.Description)
 	if err != nil {
-		return nil, err
+		return &pb.Status{Status: false}, err
 	}
 	return &pb.Status{Status: true}, nil
 }
 
-func (r *NewRestaurant) GetAllRestaurants() (*pb.Restuanants, error) {
-	rows, err := r.Db.Query("SELECT * FROM restaurants")
+func (r *NewRestaurant) GetAllRestaurants(getAll *pb.AllRestuarant) (*pb.Restuanants, error) {
+	restuarants := []*pb.GetRes{}
+	rows, err := r.Db.Query(`SELECT 
+								id, 
+								name, 
+								address, 
+								phone_number,
+								description, 
+								created_at,
+								update_at
+							FROM 
+								restaurants`)
 	if err != nil {
-		return nil, err
+		return &pb.Restuanants{Restuanants: restuarants}, err
 	}
 	var restaurants []*pb.GetRes
 	for rows.Next() {
 		restaurant := &pb.GetRes{}
-		err = rows.Scan(&restaurant.Id, &restaurant.Name, &restaurant.Address, &restaurant.Phone, &restaurant.Description, &restaurant.CreatedAt, &restaurant.UpdatedAt)
+		err = rows.Scan(&restaurant.Id, 
+						&restaurant.Name, 
+						&restaurant.Address, 
+						&restaurant.Phone, 
+						&restaurant.Description, 
+						&restaurant.CreatedAt, 
+						&restaurant.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
