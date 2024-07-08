@@ -1,6 +1,6 @@
 -- Active: 1718919020656@@127.0.0.1@5432@userservice
 
-CREATE TABLE IF NOT EXISTS restaurants_reservation_service (
+CREATE TABLE IF NOT EXISTS restaurants(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     name varchar,
     address varchar,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS restaurants_reservation_service (
     deleted_at timestamp
 )
 
-CREATE TABLE IF NOT EXISTS reservations_reservation_service (
+CREATE TABLE IF NOT EXISTS reservations(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid,
     restaurant_id uuid,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS reservations_reservation_service (
     deleted_at timestamp
 )
 
-CREATE TABLE IF NOT EXISTS reservation_orders_reservation_service (
+CREATE TABLE IF NOT EXISTS reservation_orders(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     reservation_id uuid,
     menu_item_id uuid,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS reservation_orders_reservation_service (
     deleted_at timestamp
 )
 
-CREATE TABLE IF NOT EXISTS menu_reservation_service (
+CREATE TABLE IF NOT EXISTS menu(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     restaurant_id uuid,
     name varchar,
