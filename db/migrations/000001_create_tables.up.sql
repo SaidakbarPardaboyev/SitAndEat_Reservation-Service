@@ -1,4 +1,3 @@
--- Active: 1720450426922@@localhost@5432@restaurant
 
 CREATE TABLE IF NOT EXISTS restaurants(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

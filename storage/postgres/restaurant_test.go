@@ -5,6 +5,7 @@ import (
 	"log"
 	pb "reservation/genproto/reservation"
 	"testing"
+	_ "github.com/lib/pq"
 )
 
 func Connect() *sql.DB {
