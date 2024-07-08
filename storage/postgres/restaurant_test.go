@@ -1,11 +1,13 @@
 package postgres
 
 import (
-	"database/sql"
-	"log"
 	pb "reservation/genproto/reservation"
 	"testing"
+
 	_ "github.com/lib/pq"
+
+	"database/sql"
+	"log"
 )
 
 func Connect() *sql.DB {

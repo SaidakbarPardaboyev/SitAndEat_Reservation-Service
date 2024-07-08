@@ -10,12 +10,14 @@ CREATE TABLE IF NOT EXISTS restaurants(
     deleted_at timestamp
 )
 
+CREATE TYPE Stat AS ENUM ('rejected', 'confirmed', 'active');
+
 CREATE TABLE IF NOT EXISTS reservations(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid,
     restaurant_id uuid,
     reservation_time timestamp default current_timestamp,
-    status varchar,
+    status Stat,
     created_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp,
     deleted_at timestamp
