@@ -39,7 +39,7 @@ func TestGetAllRestaurants(t *testing.T) {
 	defer db.Close()
 
 	repo := NewRestaurantRepo(db)
-	_, err = repo.GetAllRestaurants()
+	_, err = repo.GetAllRestaurants(&pb.AllRestuarant{})
 	if err != nil {
 		t.Fatalf("Failed to get all restaurants: %v", err)
 	}
