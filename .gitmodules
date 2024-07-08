@@ -1,0 +1,3 @@
+[submodule "SitAndEat_protos"]
+	path = SitAndEat_protos
+	url = git@github.com:SaidakbarPardaboyev/SitAndEat_protos.git
