@@ -1,5 +1,5 @@
 -- Insert 10 rows of predefined data into restaurants_reservation_service
-INSERT INTO restaurants_reservation_service (name, address, phone_number, description)
+INSERT INTO restaurants (name, address, phone_number, description)
 VALUES 
 ('Restaurant Alpha', '123 Main St', '555-0100', 'A popular place for brunch.'),
 ('Restaurant Beta', '456 Elm St', '555-0101', 'Known for its cozy atmosphere.'),
