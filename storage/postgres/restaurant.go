@@ -26,7 +26,7 @@ func(R *NewRestaurant) GetRestuarant(id *pb.RestuanantId)(*pb.GetRes, error){
 							created_at,
 							update_at
 						FROM 
-							restaurants_reservation_service
+							restaurants
 						WHERE
 							id = $1 and
 							deleted_at is not null`, 
@@ -45,7 +45,7 @@ func(R *NewRestaurant) GetRestuarant(id *pb.RestuanantId)(*pb.GetRes, error){
 
 func(R *NewRestaurant) UpdateRestuarant(restuarant *pb.GetRes)(*pb.Status, error){
 	_, err := R.Db.Exec(`UPDATE 
-							restaurants_reservation_service
+							restaurants
 						SET
 							name = $1,
 							address = $2,
@@ -69,7 +69,7 @@ func(R *NewRestaurant) UpdateRestuarant(restuarant *pb.GetRes)(*pb.Status, error
 
 func(R *NewRestaurant) DeleteRestuarant(id *pb.RestuanantId)(*pb.Status, error){
 	_, err := R.Db.Exec(`UPDATE
-							restaurants_reservation_service
+							restaurants
 						SET
 							deleted_at = $1
 						WHERE
