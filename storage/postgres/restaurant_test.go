@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	pb "reservation/genproto/reservation"
+	pb "reservation/genproto/resirvation"
 	"testing"
 
 	_ "github.com/lib/pq"

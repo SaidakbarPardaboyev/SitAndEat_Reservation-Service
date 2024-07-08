@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"database/sql"
-	pb "reservation/genproto/reservation"
+	pb "reservation/genproto/resirvation"
 	"time"
 )
 
@@ -135,3 +135,4 @@ func (r *NewRestaurant) GetAllRestaurants(getAll *pb.AllRestuarant) (*pb.Restuan
 	}
 	return &pb.Restuanants{Restuanants: restaurants}, nil
 }
+
