@@ -1,23 +1,30 @@
 package postgres
 
 import (
-	"testing"
+	"database/sql"
+	"log"
 	pb "reservation/genproto/reservation"
+	"testing"
 )
 
-func TestCreateRestaurant(t *testing.T) {
-	db,err := ConnectDB()
+func Connect() *sql.DB {
+	db, err := ConnectDB()
 	if err != nil {
-		t.Error(err)
+		log.Fatal("Connect error?")
 	}
 	defer db.Close()
 
+	return db
+}
+
+func TestCreateRestaurant(t *testing.T) {
+	db:= Connect()
 	repo := NewRestaurantRepo(db)
 
 	restaurant := &pb.Restuarant{
 		Name:        "Test Restaurant",
 		Address:     "123 Test St",
-		Phone: "1234567890",
+		Phone:       "1234567890",
 		Description: "A place to test",
 	}
 
@@ -29,19 +36,16 @@ func TestCreateRestaurant(t *testing.T) {
 	if !status.Status {
 		t.Errorf("Expected status true, got false")
 	}
+	
 }
-func TestGetAllRestaurants(t *testing.T) {
-	db, err := ConnectDB()
 
-	if err != nil {
-		t.Error(err)
-	}
-	defer db.Close()
+func TestGetAllRestaurants(t *testing.T) {
+	db := Connect()
 
 	repo := NewRestaurantRepo(db)
-	_, err = repo.GetAllRestaurants()
+	_, err := repo.GetAllRestaurants()
 	if err != nil {
 		t.Fatalf("Failed to get all restaurants: %v", err)
 	}
-	// TODO:
+
 }
