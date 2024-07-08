@@ -1,4 +1,5 @@
--- Active: 1718919020656@@127.0.0.1@5432@userservice
+-- Active: 1718919020656@@127.0.0.1@5432@restaurants
+
 
 CREATE TABLE IF NOT EXISTS restaurants(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

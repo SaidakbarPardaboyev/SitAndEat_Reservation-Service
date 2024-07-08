@@ -3,6 +3,8 @@ package postgres
 import (
 	"testing"
 	pb "reservation/genproto/reservation"
+
+	_ "github.com/lib/pq"
 )
 
 func TestCreateRestaurant(t *testing.T) {
