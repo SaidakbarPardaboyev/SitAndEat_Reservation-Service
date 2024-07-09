@@ -18,7 +18,7 @@ func NewMenuRepo(db *sql.DB) *Menu {
 func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
 	query := `
 	INSERT INTO menu(
-		restuarant_id, name, description, price, image
+		restaurant_id, name, description, price, image
 	) VALUES (
 		$1, $2, $3, $4, $5
 	)`
@@ -29,9 +29,9 @@ func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
 	return &menu.Status{Status: true}, nil
 }
 
-func (m *Menu) GetAllFoods() (*menu.Foods, error) {
+func (m *Menu) GetAllFoods(req *menu.Void) (*menu.Foods, error) {
 	query := `SELECT
-					id, restuarant_id, name, description, price, image, created_at, update_at
+					id, restaurant_id, name, description, price, image, created_at, update_at
 				FROM
 					menu
 				WHERE
@@ -72,7 +72,7 @@ func (m *Menu) GetAllFoods() (*menu.Foods, error) {
 
 func (m *Menu) GetFood(food *menu.FoodId) (*menu.Food, error) {
 	query := `SELECT
-					id, restuarant_id, name, description, price, image, created_at, update_at
+					id, restaurant_id, name, description, price, image, created_at, update_at
 				FROM
 					menu
 				WHERE
