@@ -3,19 +3,19 @@ package postgres
 import (
 	"database/sql"
 	"log"
+	"testing"
 
 	pb "reservation/genproto/restaurant"
-	"testing"
 
 	_ "github.com/lib/pq"
 )
 
+// Connect initializes the database connection and logs any connection errors.
 func Connect() *sql.DB {
 	db, err := ConnectDB()
 	if err != nil {
-		log.Fatal("Connect error?")
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
-
 	return db
 }
 
@@ -23,7 +23,7 @@ func TestCreateRestaurant(t *testing.T) {
 	db := Connect()
 	repo := NewRestaurantRepo(db)
 
-	restaurant := &pb.Restuarant{
+	restaurant := &pb.Restaurant{
 		Name:        "Test Restaurant",
 		Address:     "123 Test St",
 		Phone:       "1234567890",
@@ -38,62 +38,69 @@ func TestCreateRestaurant(t *testing.T) {
 	if !status.Status {
 		t.Errorf("Expected status true, got false")
 	}
-
 }
 
 func TestGetAllRestaurants(t *testing.T) {
 	db := Connect()
-
 	repo := NewRestaurantRepo(db)
-	restaurant, err := repo.GetAllRestaurants(&pb.Void{})
+
+	restaurants, err := repo.GetAllRestaurants(&pb.Void{})
 	if err != nil {
 		t.Fatalf("Failed to get all restaurants: %v", err)
 	}
 
-	if len(restaurant.Restuanants) == 0 {
-		t.Fatalf("Kamida bitta restaurant bo'lishi kerak edi lekin topilmadi?")
+	if len(restaurants.Restaurants) == 0 {
+		t.Fatalf("Expected at least one restaurant, got none")
 	}
 }
 
-func TestGetRestuarant(t *testing.T){
+func TestGetRestaurant(t *testing.T) {
 	db := Connect()
+	repo := NewRestaurantRepo(db)
 
-	repo:=NewRestaurantRepo(db)
-
-	restyaurantId:=&pb.RestuanantId{Id: "41fcc8a7-1a85-49aa-8578-476d18eb7f4b"}
-	_,err:=repo.GetRestuarant(restyaurantId)
-	if err!=nil{
-		t.Fatalf("Restaurant olishda xatolik berdi: %v",err)
+	restaurantId := &pb.RestaurantId{Id: "41fcc8a7-1a85-49aa-8578-476d18eb7f4b"}
+	_, err := repo.GetRestaurant(restaurantId)
+	if err != nil {
+		t.Fatalf("Failed to get restaurant: %v", err)
 	}
 }
 
-func TestUpdateRestuarant(t *testing.T){
-	db:=Connect()
-	repo:=NewRestaurantRepo(db)
+func TestUpdateRestaurant(t *testing.T) {
+	db := Connect()
+	repo := NewRestaurantRepo(db)
 
-	updaterestaurant:=&pb.GetRes{
-		Id: "b75236c6-69b1-4f40-b53d-e9667280c208",
-		Name: "nimadur",
-		Address: "Qayerdir",
-		Phone: "998 99 4558545",
-		Description: "description",
+	updateRestaurant := &pb.RestaurantUpdate{
+		Id:          "b75236c6-69b1-4f40-b53d-e9667280c208",
+		Name:        "Updated Name",
+		Address:     "Updated Address",
+		Phone:       "998 99 4558545",
+		Description: "Updated description",
 	}
-	_,err:=repo.UpdateRestuarant(updaterestaurant)
-	if err!=nil{
-		t.Fatalf("Update testing error: %v",err)
+
+	status, err := repo.UpdateRestaurant(updateRestaurant)
+	if err != nil {
+		t.Fatalf("Failed to update restaurant: %v", err)
+	}
+
+	if !status.Status {
+		t.Errorf("Expected status true, got false")
 	}
 }
 
-func TestDeleteRestaurant(t *testing.T){
-	db:=Connect()
+func TestDeleteRestaurant(t *testing.T) {
+	db := Connect()
+	repo := NewRestaurantRepo(db)
 
-	repo:=NewRestaurantRepo(db)
-	restaurantId:=&pb.RestuanantId{
+	restaurantId := &pb.RestaurantId{
 		Id: "b75236c6-69b1-4f40-b53d-e9667280c208",
 	}
 
-	_,err:=repo.DeleteRestuarant(restaurantId)
-	if err!=nil{
-		t.Fatalf("Error delete testing restaurant: %v",err)
+	status, err := repo.DeleteRestaurant(restaurantId)
+	if err != nil {
+		t.Fatalf("Failed to delete restaurant: %v", err)
+	}
+
+	if !status.Status {
+		t.Errorf("Expected status true, got false")
 	}
 }
