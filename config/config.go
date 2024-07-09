@@ -18,7 +18,7 @@ type Config struct {
 }
 
 func Load() Config {
-	if err := godotenv.Load("C:/restaurant/reservatio/.env"); err != nil {
+	if err := godotenv.Load("/home/azizbek/github/Restaurant/.env"); err != nil {
 		log.Print("No .env file found")
 	}
 
@@ -29,6 +29,7 @@ func Load() Config {
 	config.DB_PASSWORD = cast.ToString(Coalesce("DB_PASSWORD", "hamidjon4424"))
 	config.DB_NAME = cast.ToString(Coalesce("DB_NAME", "resuserservice"))
 	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", "50051"))
+	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", "6666"))
 
 	return config
 }

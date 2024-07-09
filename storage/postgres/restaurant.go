@@ -78,6 +78,7 @@ func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restuarant) (*pb.Status,
 		)`
 	_, err := r.Db.Exec(query, restaurant.Name, restaurant.Address,
 		restaurant.Phone, restaurant.Description)
+
 	if err != nil {
 		return &pb.Status{Status: false}, err
 	}

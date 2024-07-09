@@ -18,7 +18,7 @@ func NewMenuRepo(db *sql.DB) *Menu {
 func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
 	query := `
 	INSERT INTO menu(
-		restuarant_id, name, description, price, image
+		restaurant_id, name, description, price, image
 	) VALUES (
 		$1, $2, $3, $4, $5
 	)`
