@@ -28,7 +28,7 @@ func (m *MenuService) CreateFood(ctx context.Context, req *pb.CreateF) (*pb.Stat
 }
 
 func (m *MenuService) GetAllFoods(ctx context.Context, req *pb.Void) (*pb.Foods, error) {
-	resp, err := m.menu.GetAllFoods()
+	resp, err := m.menu.GetAllFoods(req)
 	if err != nil {
 		log.Fatalf("Malumotlarni olishda xatolik: %v", err)
 		return nil, err
