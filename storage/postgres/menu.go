@@ -10,7 +10,7 @@ type Menu struct {
 	Db *sql.DB
 }
 
-func NewMenu(db *sql.DB) *Menu {
+func NewMenuRepo(db *sql.DB) *Menu {
 	return &Menu{Db: db}
 }
 
@@ -49,26 +49,25 @@ func (m *Menu) GetAllFoods() (*menu.Foods, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	foods := &menu.Foods{}
+	fuds := &menu.Foods{}
 	for rows.Next() {
-		food := &menu.Food{}
+		fud := &menu.Food{}
 		err = rows.Scan(
-			&food.Id,
-			&food.RestuarantId,
-			&food.Name,
-			&food.Description,
-			&food.Price,
-			&food.Image,
-			&food.CreatedAt,
-			&food.UpdateAt,
+			&fud.Id,
+			&fud.RestuarantId,
+			&fud.Name,
+			&fud.Description,
+			&fud.Price,
+			&fud.Image,
+			&fud.CreatedAt,
+			&fud.UpdateAt,
 		)
 		if err != nil {
 			return nil, err
 		}
-		foods.Foods = append(foods.Foods, food)
+		fuds.Foods = append(fuds.Foods, fud)
 	}
-	return foods, nil
+	return fuds, nil
 }
 
 func (m *Menu) GetFood(food *menu.FoodId) (*menu.Food, error) {
