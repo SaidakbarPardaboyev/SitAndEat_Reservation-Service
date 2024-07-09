@@ -80,13 +80,14 @@ func (r *NewRestaurant) DeleteRestaurant(id *pb.RestaurantId) (*pb.Status, error
 
 func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restaurant) (*pb.Status, error) {
 	query := `
-		INSERT INTO 
-			restaurants(
-				name, 
-				address, 
-				phone_number, 
-				description) 
-		VALUES ($1, $2, $3, $4)`
+		INSERT INTO restaurants (
+			name, 
+			address, 
+			phone_number, 
+			description
+		) VALUES (
+		 	$1, $2, $3, $4
+		)`
 	_, err := r.Db.Exec(query,
 		restaurant.Name,
 		restaurant.Address,
@@ -101,13 +102,7 @@ func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restaurant) (*pb.Status,
 func (r *NewRestaurant) GetAllRestaurants(req *pb.Void) (*pb.Restaurants, error) {
 	query := `
 		SELECT 
-			id, 
-			name, 
-			address, 
-			phone_number,
-			description, 
-			created_at,
-			updated_at
+			id, name, address, phone_number, description, created_at, updated_at
 		FROM 
 			restaurants
 		WHERE
