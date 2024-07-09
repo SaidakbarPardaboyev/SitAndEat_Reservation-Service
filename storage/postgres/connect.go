@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"reservation/config"
+	_ "github.com/lib/pq"
 )
 
 func ConnectDB() (*sql.DB, error) {
