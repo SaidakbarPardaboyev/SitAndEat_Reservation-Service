@@ -90,7 +90,6 @@ func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 }
 
 func (r *Reservation) UpdateReservations(res *pb.ReservationUpdate) (*pb.Status, error) {
-
 	_, err := r.Db.Exec(`UPDATE
 							reservations
 						SET
