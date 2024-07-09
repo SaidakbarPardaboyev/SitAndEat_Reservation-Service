@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"database/sql"
-	pb "reservation/genproto/resirvation"
+	pb "reservation/genproto/restaurant"
 	"time"
 )
 
@@ -30,7 +30,7 @@ func(R *NewRestaurant) GetRestuarant(id *pb.RestuanantId)(*pb.GetRes, error){
 						WHERE
 							id = $1 and
 							deleted_at is not null`, 
-						id.RestuarantId).Scan(
+						id.Id).Scan(
 							&restaurant.Id,
 							&restaurant.Name,
 							&restaurant.Address,
@@ -76,7 +76,7 @@ func(R *NewRestaurant) DeleteRestuarant(id *pb.RestuanantId)(*pb.Status, error){
 							deleted_at is not null and
 							id = $2`, 
 							time.Now(),
-							id.RestuarantId)
+							id.Id)
 	if err != nil{
 		return &pb.Status{Status: false}, err
 	}
@@ -103,7 +103,7 @@ func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restuarant) (*pb.Status,
 	return &pb.Status{Status: true}, nil
 }
 
-func (r *NewRestaurant) GetAllRestaurants(getAll *pb.AllRestuarant) (*pb.Restuanants, error) {
+func (r *NewRestaurant) GetAllRestaurants(req *pb.Void) (*pb.Restuanants, error) {
 	restuarants := []*pb.GetRes{}
 	rows, err := r.Db.Query(`SELECT 
 								id, 
