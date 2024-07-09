@@ -29,7 +29,7 @@ func(R *NewRestaurant) GetRestuarant(id *pb.RestuanantId)(*pb.GetRes, error){
 							restaurants
 						WHERE
 							id = $1 and
-							deleted_at is not null`, 
+							deleted_at is null`, 
 						id.Id).Scan(
 							&restaurant.Id,
 							&restaurant.Name,
@@ -54,7 +54,7 @@ func(R *NewRestaurant) UpdateRestuarant(restuarant *pb.GetRes)(*pb.Status, error
 							update_at = $5
 						WHERE 
 							id = $6 and
-							deleted_at is not null`, 
+							deleted_at is null`, 
 							restuarant.Name,
 							restuarant.Address,
 							restuarant.Phone,

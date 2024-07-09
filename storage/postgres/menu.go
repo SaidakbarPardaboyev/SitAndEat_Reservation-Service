@@ -1,7 +1,10 @@
 package postgres
 
-import (menu "reservation/genproto/menu"
-	"database/sql")
+import (
+	"database/sql"
+	menu "reservation/genproto/menu"
+	"time"
+)
 
 type Menu struct {
 	Db *sql.DB
@@ -124,12 +127,12 @@ func (m *Menu) DeleteFood(food *menu.FoodId) (*menu.Status, error) {
 	query := `UPDATE
 					menu
 				SET
-					deleted_at = now()
+					deleted_at = $1
 				WHERE
 					deleted_at is null
-					AND id = $1`
+					AND id = $2`
 
-	_, err := m.Db.Exec(query, food.Id)
+	_, err := m.Db.Exec(query, time.Now(), food.Id)
 	if err != nil {
 		return nil, err
 	}
