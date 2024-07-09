@@ -2,8 +2,9 @@ package postgres
 
 import (
 	"database/sql"
-	menu "reservation/genproto/menu"
 	"time"
+
+	menu "reservation/genproto/menu"
 )
 
 type Menu struct {
@@ -15,13 +16,12 @@ func NewMenuRepo(db *sql.DB) *Menu {
 }
 
 func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
-	query := `INSERT INTO menu(
-								restuarant_id,
-								name,
-								description,
-								price,
-								image
-							) VALUES ($1, $2, $3, $4, $5)`
+	query := `
+		INSERT INTO menu(
+			restuarant_id, name, description, price, image
+		) VALUES (
+			$1, $2, $3, $4, $5
+		)`
 	_, err := m.Db.Exec(query, food.RestuarantId, food.Name, food.Description, food.Price, food.Image)
 	if err != nil {
 		return nil, err
@@ -30,25 +30,21 @@ func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
 }
 
 func (m *Menu) GetAllFoods() (*menu.Foods, error) {
-	query := `SELECT
-					id,
-					restuarant_id,
-					name,
-					description,
-					price,
-					image,
-					created_at,
-					update_at
-				FROM
-					menu
-				WHERE
-					deleted_at is null
-				ORDER BY
-					name`
+	query := `
+		SELECT
+			id, restuarant_id, name, description, price, image, created_at, update_at
+		FROM
+			menu
+		WHERE
+			deleted_at is null
+		ORDER BY
+			name`
 	rows, err := m.Db.Query(query)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
+
 	fuds := &menu.Foods{}
 	for rows.Next() {
 		fud := &menu.Food{}
@@ -67,19 +63,17 @@ func (m *Menu) GetAllFoods() (*menu.Foods, error) {
 		}
 		fuds.Foods = append(fuds.Foods, fud)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return fuds, nil
 }
 
 func (m *Menu) GetFood(food *menu.FoodId) (*menu.Food, error) {
 	query := `SELECT
-					id,
-					restuarant_id,
-					name,
-					description,
-					price,
-					image,
-					created_at,
-					update_at
+					id, restuarant_id, name, description, price, image, created_at, update_at
 				FROM
 					menu
 				WHERE
@@ -120,7 +114,6 @@ func (m *Menu) UpdateFood(food *menu.UpdateF) (*menu.Status, error) {
 	}
 	return &menu.Status{Status: true}, nil
 }
-
 
 func (m *Menu) DeleteFood(food *menu.FoodId) (*menu.Status, error) {
 	query := `UPDATE
