@@ -36,19 +36,15 @@ func (r *Reservation) CreateReservation(reservation *pb.RequestReservations) (*p
 
 func (r *Reservation) GetReservationByID(id *pb.ReservationId) (*pb.Reservation, error) {
 	reservation := &pb.Reservation{}
-	err := r.Db.QueryRow(`SELECT
-							id,
-							user_id,
-							restaurant_id,
-							res_time,
-							status,
-							created_at,
-							update_at
-						FROM
-							reservations
-						WHERE
-							id = $1 and
-							deleted_at is null`,
+	query := `
+		SELECT
+			id, user_id, restaurant_id, res_time, status, created_at, update_at
+		FROM
+			reservations
+		WHERE
+			id = $1 and
+			deleted_at is null`
+	err := r.Db.QueryRow(query,
 		id.Id).Scan(
 		&reservation.Id,
 		&reservation.UserId,
@@ -63,20 +59,15 @@ func (r *Reservation) GetReservationByID(id *pb.ReservationId) (*pb.Reservation,
 }
 
 func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
-
+	query := `
+			SELECT
+				id,	user_id, restaurant_id, res_time, status, created_at, update_at
+			FROM
+				reservations
+			WHERE
+				deleted_at is null`
 	reservations := []*pb.Reservation{}
-	rows, err := r.Db.Query(`SELECT
-								id,
-								user_id,
-								restaurant_id,
-								res_time,
-								status,
-								created_at,
-								update_at
-							FROM
-								reservations
-							WHERE
-								deleted_at is null`)
+	rows, err := r.Db.Query(query)
 	if err != nil {
 		return &pb.Reservations{Reservations: reservations}, err
 	}
@@ -109,7 +100,6 @@ func (r *Reservation) UpdateReservations(id *pb.ReservationUpdate) (*pb.Status, 
 						WHERE
 							id = $4 and
 							deleted_at is null`,
-		
 		id.Status,
 		time.Now(),
 		id.Id)
@@ -120,13 +110,15 @@ func (r *Reservation) UpdateReservations(id *pb.ReservationUpdate) (*pb.Status, 
 }
 
 func (r *Reservation) DeleteReservation(id *pb.ReservationId) (*pb.Status, error) {
-	_, err := r.Db.Exec(`UPDATE
-							reservations
-						SET
-							deleted_at = $1
-						WHERE
-							deleted_at is null and
-							id = $2`,
+	query := `
+			UPDATE
+				reservations
+			SET
+				deleted_at = $1
+			WHERE
+				deleted_at is null and
+				id = $2`
+	_, err := r.Db.Exec(query,
 		time.Now(),
 		id.Id)
 	if err != nil {
@@ -136,21 +128,16 @@ func (r *Reservation) DeleteReservation(id *pb.ReservationId) (*pb.Status, error
 }
 
 func (r *Reservation) GetReservationsByUserId(id *pb.UserId) (*pb.Reservations, error) {
-
+	query := `
+			SELECT
+				id, user_id, restaurant_id, res_time, status, created_at, update_at
+			FROM
+				reservations
+			WHERE
+				user_id = $1 and
+				deleted_at is null`
 	reservations := []*pb.Reservation{}
-	rows, err := r.Db.Query(`SELECT
-								id,
-								user_id,
-								restaurant_id,
-								res_time,
-								status,
-								created_at,
-								update_at
-							FROM
-								reservations
-							WHERE
-								user_id = $1 and
-								deleted_at is null`,
+	rows, err := r.Db.Query(query,
 		id.Id)
 	if err != nil {
 		return &pb.Reservations{Reservations: reservations}, err
@@ -175,18 +162,16 @@ func (r *Reservation) GetReservationsByUserId(id *pb.UserId) (*pb.Reservations, 
 }
 
 func (r *Reservation) OrderMeal(order *pb.Order) (*pb.Status, error) {
-
-	_, err := r.Db.Exec(`INSERT INTO
-							reservation_orders
-								(reservation_id, 
-								menu_item_id, 
-								quantity) 
-							VALUES 
-
-								($1, $2, $3, $4)`,
-								order.ReservatinId,
-								order.MenuItemId,
-								order.Quantity)
+	query := `
+			INSERT INTO reservation_orders (
+				reservation_id, menu_item_id, quantity
+			) VALUES (
+					$1, $2, $3, $4
+			)`
+	_, err := r.Db.Exec(query,
+		order.ReservatinId,
+		order.MenuItemId,
+		order.Quantity)
 
 	if err != nil {
 		return &pb.Status{Status: false}, err
@@ -195,15 +180,15 @@ func (r *Reservation) OrderMeal(order *pb.Order) (*pb.Status, error) {
 }
 
 func (r *Reservation) PayForReservation(payment *pb.Payment) (*pb.Status, error) {
-
-	_, err := r.Db.Exec(`INSERT INTO
-							reservation_payments
-								(reservation_id, 
-								amount) 
-							VALUES 
-								($1, $2)`,
-								payment.ReservationId,
-								payment.Amount)
+	query := `
+			INSERT INTO reservation_payments (
+				reservation_id,	amount
+			) VALUES (
+			 		$1, $2
+			)`
+	_, err := r.Db.Exec(query,
+		payment.ReservationId,
+		payment.Amount)
 
 	if err != nil {
 		return &pb.Status{Status: false}, err

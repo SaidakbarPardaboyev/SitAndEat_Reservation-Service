@@ -73,6 +73,23 @@ func TestUpdateReservations(t *testing.T){
 	repo := NewReservationRepo(db)
 
 	reservation := &pb.ReservationUpdate{
-		
+		Id: "",
+		RestuarantId: "",
+		Status: "",
 	}
+
+	status, err := repo.UpdateReservations(reservation)
+	if err != nil{
+		t.Error(err)
+	}
+
+	if !status.Status{
+		t.Error("Ma'lumot yangilanmadi")
+	}
+}
+
+func TestDeleteReservation(t *testing.T){
+	db := Connect()
+	defer db.Close()
+	repo := 
 }
