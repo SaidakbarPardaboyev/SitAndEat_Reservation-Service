@@ -73,7 +73,7 @@ func(R *NewRestaurant) DeleteRestuarant(id *pb.RestuanantId)(*pb.Status, error){
 						SET
 							deleted_at = $1
 						WHERE
-							deleted_at is not null and
+							deleted_at is null and
 							id = $2`, 
 							time.Now(),
 							id.Id)
@@ -114,7 +114,9 @@ func (r *NewRestaurant) GetAllRestaurants(req *pb.Void) (*pb.Restuanants, error)
 								created_at,
 								update_at
 							FROM 
-								restaurants`)
+								restaurants
+							WHERE 
+								deleted_at is null`)
 	if err != nil {
 		return &pb.Restuanants{Restuanants: restuarants}, err
 	}

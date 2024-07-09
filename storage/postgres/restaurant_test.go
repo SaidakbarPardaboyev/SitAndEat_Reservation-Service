@@ -21,6 +21,7 @@ func Connect() *sql.DB {
 
 func TestCreateRestaurant(t *testing.T) {
 	db := Connect()
+	defer db.Close()
 	repo := NewRestaurantRepo(db)
 
 	restaurant := &pb.Restuarant{
@@ -43,6 +44,7 @@ func TestCreateRestaurant(t *testing.T) {
 
 func TestGetAllRestaurants(t *testing.T) {
 	db := Connect()
+	defer db.Close()
 
 	repo := NewRestaurantRepo(db)
 	restaurant, err := repo.GetAllRestaurants(&pb.Void{})
@@ -57,6 +59,7 @@ func TestGetAllRestaurants(t *testing.T) {
 
 func TestGetRestuarant(t *testing.T){
 	db := Connect()
+	defer db.Close()
 
 	repo:=NewRestaurantRepo(db)
 
@@ -69,6 +72,8 @@ func TestGetRestuarant(t *testing.T){
 
 func TestUpdateRestuarant(t *testing.T){
 	db:=Connect()
+	defer db.Close()
+
 	repo:=NewRestaurantRepo(db)
 
 	updaterestaurant:=&pb.GetRes{
@@ -86,6 +91,7 @@ func TestUpdateRestuarant(t *testing.T){
 
 func TestDeleteRestaurant(t *testing.T){
 	db:=Connect()
+	defer db.Close()
 
 	repo:=NewRestaurantRepo(db)
 	restaurantId:=&pb.RestuanantId{

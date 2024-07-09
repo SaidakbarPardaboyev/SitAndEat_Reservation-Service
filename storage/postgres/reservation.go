@@ -14,28 +14,18 @@ func NewReservationRepo(db *sql.DB) *Reservation {
 	return &Reservation{Db: db}
 }
 
-func (r *Reservation) CreateReservation(reservation *pb.Reservation) (*pb.Status, error) {
+func (r *Reservation) CreateReservation(reservation *pb.RequestReservations) (*pb.Status, error) {
 
-	_, err := r.Db.Exec(`INSERT INTO
-							reservations
-						(
-							id,
+	_, err := r.Db.Exec(`INSERT 
+							INTO
+						reservations()
 							user_id,
-							restuarant_id,
-							res_time,
-							status,
-							created_at,
-							update_at
-						)
-						VALUES
-						($1,$2,$3,$4,$5,$6,$7)`,
-		reservation.Id,
+							restuarant_id,)
+						VALUES(
+							$1,
+							$2)`,
 		reservation.UserId,
-		reservation.RestuarantId,
-		reservation.ResTime,
-		reservation.Status,
-		time.Now(),
-		time.Now(),
+		reservation.RestaurantId,
 	)
 
 	if err != nil {
@@ -108,16 +98,18 @@ func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 	return &pb.Reservations{Reservations: reservations}, nil
 }
 
-func (r *Reservation) UpdateReservations(id *pb.Reservation) (*pb.Status, error) {
+func (r *Reservation) UpdateReservations(id *pb.ReservationUpdate) (*pb.Status, error) {
 
 	_, err := r.Db.Exec(`UPDATE
 							reservations
 						SET
-							status = $1,
-							update_at = $2
+							restuarant_id = $1
+							status = $2,
+							update_at = $3
 						WHERE
-							id = $3 and
+							id = $4 and
 							deleted_at is null`,
+		
 		id.Status,
 		time.Now(),
 		id.Id)
