@@ -19,242 +19,242 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Restaurant_CreateRestaurant_FullMethodName  = "/restaurant.restaurant/CreateRestaurant"
-	Restaurant_GetAllRestaurants_FullMethodName = "/restaurant.restaurant/GetAllRestaurants"
-	Restaurant_GetRestuarant_FullMethodName     = "/restaurant.restaurant/GetRestuarant"
-	Restaurant_UpdateRestuarant_FullMethodName  = "/restaurant.restaurant/UpdateRestuarant"
-	Restaurant_DeleteRestuarant_FullMethodName  = "/restaurant.restaurant/DeleteRestuarant"
+	RestaurantService_CreateRestaurant_FullMethodName  = "/restaurant.RestaurantService/CreateRestaurant"
+	RestaurantService_GetAllRestaurants_FullMethodName = "/restaurant.RestaurantService/GetAllRestaurants"
+	RestaurantService_GetRestaurant_FullMethodName     = "/restaurant.RestaurantService/GetRestaurant"
+	RestaurantService_UpdateRestaurant_FullMethodName  = "/restaurant.RestaurantService/UpdateRestaurant"
+	RestaurantService_DeleteRestaurant_FullMethodName  = "/restaurant.RestaurantService/DeleteRestaurant"
 )
 
-// RestaurantClient is the client API for Restaurant service.
+// RestaurantServiceClient is the client API for RestaurantService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type RestaurantClient interface {
-	CreateRestaurant(ctx context.Context, in *Restuarant, opts ...grpc.CallOption) (*Status, error)
-	GetAllRestaurants(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Restuanants, error)
-	GetRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*GetRes, error)
-	UpdateRestuarant(ctx context.Context, in *RestuarantUpdate, opts ...grpc.CallOption) (*Status, error)
-	DeleteRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*Status, error)
+type RestaurantServiceClient interface {
+	CreateRestaurant(ctx context.Context, in *Restaurant, opts ...grpc.CallOption) (*Status, error)
+	GetAllRestaurants(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Restaurants, error)
+	GetRestaurant(ctx context.Context, in *RestaurantId, opts ...grpc.CallOption) (*GetRes, error)
+	UpdateRestaurant(ctx context.Context, in *RestaurantUpdate, opts ...grpc.CallOption) (*Status, error)
+	DeleteRestaurant(ctx context.Context, in *RestaurantId, opts ...grpc.CallOption) (*Status, error)
 }
 
-type restaurantClient struct {
+type restaurantServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewRestaurantClient(cc grpc.ClientConnInterface) RestaurantClient {
-	return &restaurantClient{cc}
+func NewRestaurantServiceClient(cc grpc.ClientConnInterface) RestaurantServiceClient {
+	return &restaurantServiceClient{cc}
 }
 
-func (c *restaurantClient) CreateRestaurant(ctx context.Context, in *Restuarant, opts ...grpc.CallOption) (*Status, error) {
+func (c *restaurantServiceClient) CreateRestaurant(ctx context.Context, in *Restaurant, opts ...grpc.CallOption) (*Status, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Status)
-	err := c.cc.Invoke(ctx, Restaurant_CreateRestaurant_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, RestaurantService_CreateRestaurant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *restaurantClient) GetAllRestaurants(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Restuanants, error) {
+func (c *restaurantServiceClient) GetAllRestaurants(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Restaurants, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Restuanants)
-	err := c.cc.Invoke(ctx, Restaurant_GetAllRestaurants_FullMethodName, in, out, cOpts...)
+	out := new(Restaurants)
+	err := c.cc.Invoke(ctx, RestaurantService_GetAllRestaurants_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *restaurantClient) GetRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*GetRes, error) {
+func (c *restaurantServiceClient) GetRestaurant(ctx context.Context, in *RestaurantId, opts ...grpc.CallOption) (*GetRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetRes)
-	err := c.cc.Invoke(ctx, Restaurant_GetRestuarant_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, RestaurantService_GetRestaurant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *restaurantClient) UpdateRestuarant(ctx context.Context, in *RestuarantUpdate, opts ...grpc.CallOption) (*Status, error) {
+func (c *restaurantServiceClient) UpdateRestaurant(ctx context.Context, in *RestaurantUpdate, opts ...grpc.CallOption) (*Status, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Status)
-	err := c.cc.Invoke(ctx, Restaurant_UpdateRestuarant_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, RestaurantService_UpdateRestaurant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *restaurantClient) DeleteRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*Status, error) {
+func (c *restaurantServiceClient) DeleteRestaurant(ctx context.Context, in *RestaurantId, opts ...grpc.CallOption) (*Status, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Status)
-	err := c.cc.Invoke(ctx, Restaurant_DeleteRestuarant_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, RestaurantService_DeleteRestaurant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// RestaurantServer is the server API for Restaurant service.
-// All implementations must embed UnimplementedRestaurantServer
+// RestaurantServiceServer is the server API for RestaurantService service.
+// All implementations must embed UnimplementedRestaurantServiceServer
 // for forward compatibility
-type RestaurantServer interface {
-	CreateRestaurant(context.Context, *Restuarant) (*Status, error)
-	GetAllRestaurants(context.Context, *Void) (*Restuanants, error)
-	GetRestuarant(context.Context, *RestuanantId) (*GetRes, error)
-	UpdateRestuarant(context.Context, *RestuarantUpdate) (*Status, error)
-	DeleteRestuarant(context.Context, *RestuanantId) (*Status, error)
-	mustEmbedUnimplementedRestaurantServer()
+type RestaurantServiceServer interface {
+	CreateRestaurant(context.Context, *Restaurant) (*Status, error)
+	GetAllRestaurants(context.Context, *Void) (*Restaurants, error)
+	GetRestaurant(context.Context, *RestaurantId) (*GetRes, error)
+	UpdateRestaurant(context.Context, *RestaurantUpdate) (*Status, error)
+	DeleteRestaurant(context.Context, *RestaurantId) (*Status, error)
+	mustEmbedUnimplementedRestaurantServiceServer()
 }
 
-// UnimplementedRestaurantServer must be embedded to have forward compatible implementations.
-type UnimplementedRestaurantServer struct {
+// UnimplementedRestaurantServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedRestaurantServiceServer struct {
 }
 
-func (UnimplementedRestaurantServer) CreateRestaurant(context.Context, *Restuarant) (*Status, error) {
+func (UnimplementedRestaurantServiceServer) CreateRestaurant(context.Context, *Restaurant) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRestaurant not implemented")
 }
-func (UnimplementedRestaurantServer) GetAllRestaurants(context.Context, *Void) (*Restuanants, error) {
+func (UnimplementedRestaurantServiceServer) GetAllRestaurants(context.Context, *Void) (*Restaurants, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllRestaurants not implemented")
 }
-func (UnimplementedRestaurantServer) GetRestuarant(context.Context, *RestuanantId) (*GetRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetRestuarant not implemented")
+func (UnimplementedRestaurantServiceServer) GetRestaurant(context.Context, *RestaurantId) (*GetRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRestaurant not implemented")
 }
-func (UnimplementedRestaurantServer) UpdateRestuarant(context.Context, *RestuarantUpdate) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateRestuarant not implemented")
+func (UnimplementedRestaurantServiceServer) UpdateRestaurant(context.Context, *RestaurantUpdate) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRestaurant not implemented")
 }
-func (UnimplementedRestaurantServer) DeleteRestuarant(context.Context, *RestuanantId) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteRestuarant not implemented")
+func (UnimplementedRestaurantServiceServer) DeleteRestaurant(context.Context, *RestaurantId) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRestaurant not implemented")
 }
-func (UnimplementedRestaurantServer) mustEmbedUnimplementedRestaurantServer() {}
+func (UnimplementedRestaurantServiceServer) mustEmbedUnimplementedRestaurantServiceServer() {}
 
-// UnsafeRestaurantServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to RestaurantServer will
+// UnsafeRestaurantServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RestaurantServiceServer will
 // result in compilation errors.
-type UnsafeRestaurantServer interface {
-	mustEmbedUnimplementedRestaurantServer()
+type UnsafeRestaurantServiceServer interface {
+	mustEmbedUnimplementedRestaurantServiceServer()
 }
 
-func RegisterRestaurantServer(s grpc.ServiceRegistrar, srv RestaurantServer) {
-	s.RegisterService(&Restaurant_ServiceDesc, srv)
+func RegisterRestaurantServiceServer(s grpc.ServiceRegistrar, srv RestaurantServiceServer) {
+	s.RegisterService(&RestaurantService_ServiceDesc, srv)
 }
 
-func _Restaurant_CreateRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Restuarant)
+func _RestaurantService_CreateRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Restaurant)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RestaurantServer).CreateRestaurant(ctx, in)
+		return srv.(RestaurantServiceServer).CreateRestaurant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Restaurant_CreateRestaurant_FullMethodName,
+		FullMethod: RestaurantService_CreateRestaurant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).CreateRestaurant(ctx, req.(*Restuarant))
+		return srv.(RestaurantServiceServer).CreateRestaurant(ctx, req.(*Restaurant))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Restaurant_GetAllRestaurants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RestaurantService_GetAllRestaurants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Void)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RestaurantServer).GetAllRestaurants(ctx, in)
+		return srv.(RestaurantServiceServer).GetAllRestaurants(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Restaurant_GetAllRestaurants_FullMethodName,
+		FullMethod: RestaurantService_GetAllRestaurants_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).GetAllRestaurants(ctx, req.(*Void))
+		return srv.(RestaurantServiceServer).GetAllRestaurants(ctx, req.(*Void))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Restaurant_GetRestuarant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RestuanantId)
+func _RestaurantService_GetRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestaurantId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RestaurantServer).GetRestuarant(ctx, in)
+		return srv.(RestaurantServiceServer).GetRestaurant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Restaurant_GetRestuarant_FullMethodName,
+		FullMethod: RestaurantService_GetRestaurant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).GetRestuarant(ctx, req.(*RestuanantId))
+		return srv.(RestaurantServiceServer).GetRestaurant(ctx, req.(*RestaurantId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Restaurant_UpdateRestuarant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RestuarantUpdate)
+func _RestaurantService_UpdateRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestaurantUpdate)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RestaurantServer).UpdateRestuarant(ctx, in)
+		return srv.(RestaurantServiceServer).UpdateRestaurant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Restaurant_UpdateRestuarant_FullMethodName,
+		FullMethod: RestaurantService_UpdateRestaurant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).UpdateRestuarant(ctx, req.(*RestuarantUpdate))
+		return srv.(RestaurantServiceServer).UpdateRestaurant(ctx, req.(*RestaurantUpdate))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Restaurant_DeleteRestuarant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RestuanantId)
+func _RestaurantService_DeleteRestaurant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestaurantId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RestaurantServer).DeleteRestuarant(ctx, in)
+		return srv.(RestaurantServiceServer).DeleteRestaurant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Restaurant_DeleteRestuarant_FullMethodName,
+		FullMethod: RestaurantService_DeleteRestaurant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).DeleteRestuarant(ctx, req.(*RestuanantId))
+		return srv.(RestaurantServiceServer).DeleteRestaurant(ctx, req.(*RestaurantId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Restaurant_ServiceDesc is the grpc.ServiceDesc for Restaurant service.
+// RestaurantService_ServiceDesc is the grpc.ServiceDesc for RestaurantService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Restaurant_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "restaurant.restaurant",
-	HandlerType: (*RestaurantServer)(nil),
+var RestaurantService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "restaurant.RestaurantService",
+	HandlerType: (*RestaurantServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateRestaurant",
-			Handler:    _Restaurant_CreateRestaurant_Handler,
+			Handler:    _RestaurantService_CreateRestaurant_Handler,
 		},
 		{
 			MethodName: "GetAllRestaurants",
-			Handler:    _Restaurant_GetAllRestaurants_Handler,
+			Handler:    _RestaurantService_GetAllRestaurants_Handler,
 		},
 		{
-			MethodName: "GetRestuarant",
-			Handler:    _Restaurant_GetRestuarant_Handler,
+			MethodName: "GetRestaurant",
+			Handler:    _RestaurantService_GetRestaurant_Handler,
 		},
 		{
-			MethodName: "UpdateRestuarant",
-			Handler:    _Restaurant_UpdateRestuarant_Handler,
+			MethodName: "UpdateRestaurant",
+			Handler:    _RestaurantService_UpdateRestaurant_Handler,
 		},
 		{
-			MethodName: "DeleteRestuarant",
-			Handler:    _Restaurant_DeleteRestuarant_Handler,
+			MethodName: "DeleteRestaurant",
+			Handler:    _RestaurantService_DeleteRestaurant_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
