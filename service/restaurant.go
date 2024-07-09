@@ -11,16 +11,18 @@ import (
 
 type RestaurantService struct {
 	pb.UnimplementedRestaurantServer
-	db    *sql.DB
-	reser *postgres.NewRestaurant
+	Reser *postgres.NewRestaurant
 }
 
-func NewRestaurantService(db *sql.DB, reser *postgres.NewRestaurant) *RestaurantService {
-	return &RestaurantService{db: db, reser: reser}
+func NewRestaurantService(db *sql.DB) *RestaurantService {
+	reser := postgres.NewRestaurantRepo(db)
+	return &RestaurantService{
+		Reser: reser,
+	}
 }
 
 func (s *RestaurantService) CreateRestaurant(ctx context.Context, req *pb.Restuarant) (*pb.Status, error) {
-	resp, err := s.reser.CreateRestaurant(req)
+	resp, err := s.Reser.CreateRestaurant(req)
 	if err != nil {
 		log.Println("Error inserting data:", err)
 		return nil, err
@@ -29,7 +31,7 @@ func (s *RestaurantService) CreateRestaurant(ctx context.Context, req *pb.Restua
 }
 
 func (s *RestaurantService) GetAllRestaurants(ctx context.Context, req *pb.Void) (*pb.Restuanants, error) {
-	resp, err := s.reser.GetAllRestaurants(req)
+	resp, err := s.Reser.GetAllRestaurants(req)
 	if err != nil {
 		log.Println("Error getting all restaurants:", err)
 		return nil, err
@@ -38,7 +40,7 @@ func (s *RestaurantService) GetAllRestaurants(ctx context.Context, req *pb.Void)
 }
 
 func (s *RestaurantService) GetRestaurant(ctx context.Context, req *pb.RestuanantId) (*pb.GetRes, error) {
-	resp, err := s.reser.GetRestaurant(req)
+	resp, err := s.Reser.GetRestaurant(req)
 	if err != nil {
 		log.Println("Error getting restaurant:", err)
 		return nil, err
@@ -47,7 +49,7 @@ func (s *RestaurantService) GetRestaurant(ctx context.Context, req *pb.Restuanan
 }
 
 func (s *RestaurantService) UpdateRestaurant(ctx context.Context, req *pb.RestuarantUpdate) (*pb.Status, error) {
-	resp, err := s.reser.UpdateRestaurant(req)
+	resp, err := s.Reser.UpdateRestaurant(req)
 	if err != nil {
 		log.Println("Error updating restaurant:", err)
 		return nil, err
@@ -56,7 +58,7 @@ func (s *RestaurantService) UpdateRestaurant(ctx context.Context, req *pb.Restua
 }
 
 func (s *RestaurantService) DeleteRestaurant(ctx context.Context, req *pb.RestuanantId) (*pb.Status, error) {
-	resp, err := s.reser.DeleteRestaurant(req)
+	resp, err := s.Reser.DeleteRestaurant(req)
 	if err != nil {
 		log.Println("Error deleting restaurant:", err)
 		return nil, err

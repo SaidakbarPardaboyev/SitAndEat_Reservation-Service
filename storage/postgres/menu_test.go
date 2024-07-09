@@ -36,7 +36,7 @@ func TestGetAllFoods(t *testing.T) {
 	db := Connect()
 
 	repo := NewMenuRepo(db)
-	foods, err := repo.GetAllFoods(&pb.Void{})
+	foods, err := repo.GetAllFoods()
 	if err != nil {
 		t.Fatalf("GetAllFoods testing error: %v", err)
 	}

@@ -13,32 +13,31 @@ import (
 	"google.golang.org/grpc"
 )
 
-
-func main(){
+func main() {
 	listener, err := net.Listen("tcp", config.Load().RESERVATION_SERVICE)
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	defer listener.Close()
 
 	db, err := postgres.ConnectDB()
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	menuService := service.NewMenuService(db, postgres.NewMenuRepo(db))
-	reservationService := service.NewReservationService(db, postgres.NewReservationRepo(db))
-	restaurantService := service.NewRestaurantService(db, postgres.NewRestaurantRepo(db))
-	
+	menuService := service.NewMenuService(db)
+	reservationService := service.NewReservationService(db)
+	restaurantService := service.NewRestaurantService(db)
+
 	service := grpc.NewServer()
 
 	menu.RegisterMenuServer(service, menuService)
 	resirvation.RegisterResirvationServer(service, reservationService)
-	restaurant.RegisterRestaurantServiceServer(service, restaurantService)
+	restaurant.RegisterRestaurantServer(service, restaurantService)
 
 	log.Printf("Server is listening on port %s\n", config.Load().RESERVATION_SERVICE)
-	if err = service.Serve(listener); err != nil{
+	if err = service.Serve(listener); err != nil {
 		log.Fatal(err)
 	}
 }
