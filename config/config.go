@@ -9,12 +9,12 @@ import (
 )
 
 type Config struct {
-	HTTP_PORT   string
-	DB_HOST     string
-	DB_PORT     string
-	DB_USER     string
-	DB_PASSWORD string
-	DB_NAME     string
+	RESERVATION_SERVICE string
+	DB_HOST             string
+	DB_PORT             string
+	DB_USER             string
+	DB_PASSWORD         string
+	DB_NAME             string
 }
 
 func Load() Config {
@@ -28,7 +28,7 @@ func Load() Config {
 	config.DB_USER = cast.ToString(Coalesce("DB_USER", "postgres"))
 	config.DB_PASSWORD = cast.ToString(Coalesce("DB_PASSWORD", "hamidjon4424"))
 	config.DB_NAME = cast.ToString(Coalesce("DB_NAME", "resuserservice"))
-	config.HTTP_PORT = cast.ToString(Coalesce("HTTP_PORT", "50051"))
+	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", "50051"))
 
 	return config
 }

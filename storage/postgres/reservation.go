@@ -16,21 +16,17 @@ func NewReservationRepo(db *sql.DB) *Reservation {
 
 func (r *Reservation) CreateReservation(reservation *pb.RequestReservations) (*pb.Status, error) {
 
-	_, err := r.Db.Exec(`INSERT 
-							INTO
-						reservations()
-							user_id,
-							restuarant_id,)
-						VALUES(
-							$1,
-							$2)`,
-		reservation.UserId,
-		reservation.RestaurantId,
-	)
+	query := `
+		INSERT INTO reservations(
+			user_id, restuarant_id
+		) VALUES(
+			$1, $2
+		)`
 
-	if err != nil {
+	if _, err := r.Db.Exec(query, reservation.UserId, reservation.RestaurantId); err != nil {
 		return &pb.Status{Status: false}, err
 	}
+
 	return &pb.Status{Status: true}, nil
 }
 
@@ -45,14 +41,9 @@ func (r *Reservation) GetReservationByID(id *pb.ReservationId) (*pb.Reservation,
 			id = $1 and
 			deleted_at is null`
 	err := r.Db.QueryRow(query,
-		id.Id).Scan(
-		&reservation.Id,
-		&reservation.UserId,
-		&reservation.RestuarantId,
-		&reservation.ResTime,
-		&reservation.Status,
-		&reservation.CreatedAt,
-		&reservation.UpdateAt,
+		id.Id).Scan(&reservation.Id,
+		&reservation.UserId, &reservation.RestuarantId, &reservation.ResTime,
+		&reservation.Status, &reservation.CreatedAt, &reservation.UpdateAt,
 	)
 
 	return reservation, err
@@ -61,7 +52,8 @@ func (r *Reservation) GetReservationByID(id *pb.ReservationId) (*pb.Reservation,
 func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 	query := `
 			SELECT
-				id,	user_id, restaurant_id, res_time, status, created_at, update_at
+				id,	user_id, restaurant_id, res_time, status, created_at, 
+				update_at
 			FROM
 				reservations
 			WHERE
@@ -74,12 +66,8 @@ func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 	for rows.Next() {
 		reservation := &pb.Reservation{}
 		err = rows.Scan(&reservation.Id,
-			&reservation.UserId,
-			&reservation.RestuarantId,
-			&reservation.ResTime,
-			&reservation.Status,
-			&reservation.CreatedAt,
-			&reservation.UpdateAt,
+			&reservation.UserId, &reservation.RestuarantId, &reservation.ResTime,
+			&reservation.Status, &reservation.CreatedAt, &reservation.UpdateAt,
 		)
 		if err != nil {
 			return nil, err
@@ -90,19 +78,18 @@ func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 }
 
 func (r *Reservation) UpdateReservations(res *pb.ReservationUpdate) (*pb.Status, error) {
-	_, err := r.Db.Exec(`UPDATE
-							reservations
-						SET
-							restuarant_id = $1
-							status = $2,
-							update_at = $3
-						WHERE
-							id = $4 and
-							deleted_at is null`,
-		res.RestuarantId,
-		res.Status,
-		time.Now(),
-		res.Id)
+	query := `
+		UPDATE
+			reservations
+		SET
+			restuarant_id = $1
+			status = $2,
+			update_at = $3
+		WHERE
+			id = $4 and
+			deleted_at is null`
+
+	_, err := r.Db.Exec(query, res.RestuarantId, res.Status, time.Now(), res.Id)
 	if err != nil {
 		return &pb.Status{Status: false}, err
 	}
@@ -118,9 +105,7 @@ func (r *Reservation) DeleteReservation(id *pb.ReservationId) (*pb.Status, error
 			WHERE
 				deleted_at is null and
 				id = $2`
-	_, err := r.Db.Exec(query,
-		time.Now(),
-		id.Id)
+	_, err := r.Db.Exec(query, time.Now(), id.Id)
 	if err != nil {
 		return &pb.Status{Status: false}, err
 	}
@@ -130,12 +115,15 @@ func (r *Reservation) DeleteReservation(id *pb.ReservationId) (*pb.Status, error
 func (r *Reservation) GetReservationsByUserId(id *pb.UserId) (*pb.Reservations, error) {
 	query := `
 			SELECT
-				id, user_id, restaurant_id, res_time, status, created_at, update_at
+				id, user_id, restaurant_id, res_time, status, created_at, 
+				update_at
 			FROM
 				reservations
 			WHERE
 				user_id = $1 and
-				deleted_at is null`
+				deleted_at is null
+			`
+
 	reservations := []*pb.Reservation{}
 	rows, err := r.Db.Query(query,
 		id.Id)
@@ -145,12 +133,8 @@ func (r *Reservation) GetReservationsByUserId(id *pb.UserId) (*pb.Reservations, 
 	for rows.Next() {
 		reservation := &pb.Reservation{}
 		err = rows.Scan(&reservation.Id,
-			&reservation.UserId,
-			&reservation.RestuarantId,
-			&reservation.ResTime,
-			&reservation.Status,
-			&reservation.CreatedAt,
-			&reservation.UpdateAt,
+			&reservation.UserId, &reservation.RestuarantId, &reservation.ResTime,
+			&reservation.Status, &reservation.CreatedAt, &reservation.UpdateAt,
 		)
 		if err != nil {
 			return nil, err
@@ -166,11 +150,9 @@ func (r *Reservation) OrderMeal(order *pb.Order) (*pb.Status, error) {
 			INSERT INTO reservation_orders (
 				reservation_id, menu_item_id, quantity
 			) VALUES (
-					$1, $2, $3, $4
+				$1, $2, $3, $4
 			)`
-	_, err := r.Db.Exec(query,
-		order.ReservatinId,
-		order.MenuItemId,
+	_, err := r.Db.Exec(query, order.ReservatinId, order.MenuItemId,
 		order.Quantity)
 
 	if err != nil {
@@ -184,11 +166,9 @@ func (r *Reservation) PayForReservation(payment *pb.Payment) (*pb.Status, error)
 			INSERT INTO reservation_payments (
 				reservation_id,	amount
 			) VALUES (
-			 		$1, $2
+			 	$1, $2
 			)`
-	_, err := r.Db.Exec(query,
-		payment.ReservationId,
-		payment.Amount)
+	_, err := r.Db.Exec(query, payment.ReservationId, payment.Amount)
 
 	if err != nil {
 		return &pb.Status{Status: false}, err
