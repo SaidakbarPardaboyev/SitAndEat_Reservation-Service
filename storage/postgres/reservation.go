@@ -89,7 +89,7 @@ func (r *Reservation) GetAllReservation() (*pb.Reservations, error) {
 	return &pb.Reservations{Reservations: reservations}, nil
 }
 
-func (r *Reservation) UpdateReservations(id *pb.ReservationUpdate) (*pb.Status, error) {
+func (r *Reservation) UpdateReservations(res *pb.ReservationUpdate) (*pb.Status, error) {
 
 	_, err := r.Db.Exec(`UPDATE
 							reservations
@@ -100,9 +100,10 @@ func (r *Reservation) UpdateReservations(id *pb.ReservationUpdate) (*pb.Status, 
 						WHERE
 							id = $4 and
 							deleted_at is null`,
-		id.Status,
+		res.RestuarantId,
+		res.Status,
 		time.Now(),
-		id.Id)
+		res.Id)
 	if err != nil {
 		return &pb.Status{Status: false}, err
 	}

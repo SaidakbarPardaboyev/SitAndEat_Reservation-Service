@@ -4,6 +4,7 @@ import (
 	"reflect"
 	pb "reservation/genproto/resirvation"
 	"testing"
+
 )
 
 func TestCreateReservation(t *testing.T){
@@ -22,7 +23,7 @@ func TestCreateReservation(t *testing.T){
 	}
 
 	if !status.Status{
-		t.Error("Service xato ishladi.")
+		t.Errorf("Service xato ishladi.")
 	}
 }
 
@@ -51,7 +52,7 @@ func TestGetReservationByID(t *testing.T){
 	}
 
 	if !reflect.DeepEqual(reservation, reservationDb){
-		t.Error("Ma'lumotlar mos kelmadi.")
+		t.Errorf("Ma'lumotlar mos kelmadi.")
 	}
 }
 
@@ -84,12 +85,80 @@ func TestUpdateReservations(t *testing.T){
 	}
 
 	if !status.Status{
-		t.Error("Ma'lumot yangilanmadi")
+		t.Errorf("Ma'lumot yangilanmadi")
 	}
 }
 
 func TestDeleteReservation(t *testing.T){
 	db := Connect()
 	defer db.Close()
-	repo := 
+	repo := NewReservationRepo(db)
+
+	id := &pb.ReservationId{
+		Id: "",
+	}
+
+	status, err := repo.DeleteReservation(id)
+	if err != nil{
+		t.Error(err)
+	}
+
+	if !status.Status{
+		t.Errorf("Ma'lumot o'chirilmadi.")
+	}
+}
+
+func TestGetReservationsByUserId(t *testing.T){
+	db := Connect()
+	defer db.Close()
+	repo := NewReservationRepo(db)
+
+	id := &pb.UserId{}
+
+	_, err := repo.GetReservationsByUserId(id)
+	if err != nil{
+		t.Error(err)
+	} 
+}
+
+func TestOrderMeal(t *testing.T){
+	db := Connect()
+	defer db.Close()
+	repo := NewReservationRepo(db)
+
+	order := &pb.Order{
+		ReservatinId: "",
+		MenuItemId: "",
+		Quantity: 0,
+	}
+
+	status, err := repo.OrderMeal(order)
+	if err != nil{
+		t.Error(err)
+	}
+
+	if !status.Status{
+		t.Errorf("Buyurtma qabul qilinmadi.")
+	}
+}
+
+
+func TestPayForReservation(t *testing.T){
+	db := Connect()
+	defer db.Close()
+	repo := NewReservationRepo(db)
+
+	payment := &pb.Payment{
+		ReservationId: "",
+		Amount: 0.0,
+	}
+
+	status, err := repo.PayForReservation(payment)
+	if err != nil{
+		t.Error(err)
+	}
+
+	if !status.Status{
+		t.Errorf("To'lov qilishda xatolik.")
+	}
 }
