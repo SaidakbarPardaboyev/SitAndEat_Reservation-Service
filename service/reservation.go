@@ -17,7 +17,7 @@ func NewReservationService(db *sql.DB,reser *postgres.Reservation) *ReservationS
 	return &ReservationService{db: db,reser: reser}
 }
 
-func (r *ReservationService) Createreservations(ctx context.Context,req *pb.Reservation)(*pb.Status,error){
+func (r *ReservationService) Createreservations(ctx context.Context,req *pb.RequestReservations)(*pb.Status,error){
 	resp,err:=r.reser.CreateReservation(req)
 	if err != nil {
 		log.Fatalf("Malumotlarni insert qilishda xatolik: %v",err)
