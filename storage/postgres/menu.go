@@ -128,3 +128,21 @@ func (m *Menu) DeleteFood(food *menu.FoodId) (*menu.Status, error) {
 	}
 	return &menu.Status{Status: true}, nil
 }
+
+func (m *Menu) GetRestaurantIdByMealId(food *menu.FoodId) (*menu.FoodId, error) {
+	query := `
+		select
+			restaurant_id
+		from 
+			menu
+		where
+			id = $1 and
+			deleted_at is null
+	`
+	var id string
+	err := m.Db.QueryRow(query, food.Id).Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+	return &menu.FoodId{Id: id}, nil
+}

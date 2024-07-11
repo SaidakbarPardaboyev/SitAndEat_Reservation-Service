@@ -16,13 +16,9 @@ func TestCreateReservation(t *testing.T) {
 		RestaurantId: "",
 	}
 
-	status, err := repo.CreateReservation(reservation)
+	_, err := repo.CreateReservation(reservation)
 	if err != nil {
 		t.Error(err)
-	}
-
-	if !status.Status {
-		t.Errorf("CreateReservation method did not work")
 	}
 }
 

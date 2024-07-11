@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResirvationClient interface {
-	Createreservations(ctx context.Context, in *RequestReservations, opts ...grpc.CallOption) (*Status, error)
-	GetAllReservations(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reservations, error)
+	Createreservations(ctx context.Context, in *RequestReservations, opts ...grpc.CallOption) (*ReservationId, error)
+	GetAllReservations(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Reservations, error)
 	GetByIdReservations(ctx context.Context, in *ReservationId, opts ...grpc.CallOption) (*Reservation, error)
 	UpdateReservations(ctx context.Context, in *ReservationUpdate, opts ...grpc.CallOption) (*Status, error)
 	DeleteReservations(ctx context.Context, in *ReservationId, opts ...grpc.CallOption) (*Status, error)
@@ -40,8 +40,8 @@ func NewResirvationClient(cc grpc.ClientConnInterface) ResirvationClient {
 	return &resirvationClient{cc}
 }
 
-func (c *resirvationClient) Createreservations(ctx context.Context, in *RequestReservations, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
+func (c *resirvationClient) Createreservations(ctx context.Context, in *RequestReservations, opts ...grpc.CallOption) (*ReservationId, error) {
+	out := new(ReservationId)
 	err := c.cc.Invoke(ctx, "/resirvation.Resirvation/Createreservations", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (c *resirvationClient) Createreservations(ctx context.Context, in *RequestR
 	return out, nil
 }
 
-func (c *resirvationClient) GetAllReservations(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reservations, error) {
+func (c *resirvationClient) GetAllReservations(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Reservations, error) {
 	out := new(Reservations)
 	err := c.cc.Invoke(ctx, "/resirvation.Resirvation/GetAllReservations", in, out, opts...)
 	if err != nil {
@@ -116,8 +116,8 @@ func (c *resirvationClient) PayForReservation(ctx context.Context, in *Payment, 
 // All implementations must embed UnimplementedResirvationServer
 // for forward compatibility
 type ResirvationServer interface {
-	Createreservations(context.Context, *RequestReservations) (*Status, error)
-	GetAllReservations(context.Context, *Void) (*Reservations, error)
+	Createreservations(context.Context, *RequestReservations) (*ReservationId, error)
+	GetAllReservations(context.Context, *Filter) (*Reservations, error)
 	GetByIdReservations(context.Context, *ReservationId) (*Reservation, error)
 	UpdateReservations(context.Context, *ReservationUpdate) (*Status, error)
 	DeleteReservations(context.Context, *ReservationId) (*Status, error)
@@ -131,10 +131,10 @@ type ResirvationServer interface {
 type UnimplementedResirvationServer struct {
 }
 
-func (UnimplementedResirvationServer) Createreservations(context.Context, *RequestReservations) (*Status, error) {
+func (UnimplementedResirvationServer) Createreservations(context.Context, *RequestReservations) (*ReservationId, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Createreservations not implemented")
 }
-func (UnimplementedResirvationServer) GetAllReservations(context.Context, *Void) (*Reservations, error) {
+func (UnimplementedResirvationServer) GetAllReservations(context.Context, *Filter) (*Reservations, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllReservations not implemented")
 }
 func (UnimplementedResirvationServer) GetByIdReservations(context.Context, *ReservationId) (*Reservation, error) {
@@ -187,7 +187,7 @@ func _Resirvation_Createreservations_Handler(srv interface{}, ctx context.Contex
 }
 
 func _Resirvation_GetAllReservations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Void)
+	in := new(Filter)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func _Resirvation_GetAllReservations_Handler(srv interface{}, ctx context.Contex
 		FullMethod: "/resirvation.Resirvation/GetAllReservations",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResirvationServer).GetAllReservations(ctx, req.(*Void))
+		return srv.(ResirvationServer).GetAllReservations(ctx, req.(*Filter))
 	}
 	return interceptor(ctx, in, info, handler)
 }

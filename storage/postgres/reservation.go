@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	pb "reservation/genproto/resirvation"
 	"time"
+	"github.com/google/uuid"
 )
 
 type Reservation struct {
@@ -14,20 +15,21 @@ func NewReservationRepo(db *sql.DB) *Reservation {
 	return &Reservation{Db: db}
 }
 
-func (r *Reservation) CreateReservation(reservation *pb.RequestReservations) (*pb.Status, error) {
+func (r *Reservation) CreateReservation(reservation *pb.RequestReservations) (*pb.ReservationId, error) {
 
 	query := `
 		INSERT INTO reservations(
-			user_id, restuarant_id
+			id, user_id, restuarant_id
 		) VALUES(
-			$1, $2
+			$1, $2, $3
 		)`
 
-	if _, err := r.Db.Exec(query, reservation.UserId, reservation.RestaurantId); err != nil {
-		return &pb.Status{Status: false}, err
+	newId := uuid.NewString()
+	if _, err := r.Db.Exec(query, newId, reservation.UserId, reservation.RestaurantId); err != nil {
+		return &pb.ReservationId{}, err
 	}
 
-	return &pb.Status{Status: true}, nil
+	return &pb.ReservationId{Id: newId}, nil
 }
 
 func (r *Reservation) GetReservationByID(id *pb.ReservationId) (*pb.Reservation, error) {

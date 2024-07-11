@@ -4,26 +4,70 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	pbM "reservation/genproto/menu"
 	pb "reservation/genproto/resirvation"
 	"reservation/storage/postgres"
+	"reservation/storage/redis"
 )
 
 type ReservationService struct {
 	pb.UnimplementedResirvationServer
-	Reser *postgres.Reservation
+	Reser     *postgres.Reservation
+	MenuRepo  *postgres.Menu
+	MenuRedis *redis.MenuRedisClient
 }
 
 func NewReservationService(db *sql.DB) *ReservationService {
 	reser := postgres.NewReservationRepo(db)
+	menuRepo := postgres.NewMenuRepo(db)
+	menu := redis.NewMenuRedisClient(redis.NewRedisClient())
 	return &ReservationService{
-		Reser: reser}
+		Reser:     reser,
+		MenuRedis: menu,
+		MenuRepo:  menuRepo,
+	}
 }
 
-func (r *ReservationService) Createreservations(ctx context.Context, req *pb.RequestReservations) (*pb.Status, error) {
+func (r *ReservationService) Createreservations(ctx context.Context, req *pb.RequestReservations) (*pb.ReservationId, error) {
 	resp, err := r.Reser.CreateReservation(req)
 	if err != nil {
 		log.Fatalf("Malumotlarni insert qilishda xatolik: %v", err)
 		return nil, err
+	}
+
+	meals, err := r.MenuRedis.GetMeals(ctx)
+	if err != nil {
+		log.Fatalf("Malumotlarni insert qilishda xatolik: %v", err)
+		return nil, err
+	}
+
+	uniqueRestaurant := map[string]bool{}
+	for ind := range meals.Meals {
+		resId, err := r.MenuRepo.GetRestaurantIdByMealId(&pbM.FoodId{Id: meals.Meals[ind].MealId})
+		if err != nil {
+			log.Fatalf("Malumotlarni insert qilishda xatolik: %v", err)
+			return nil, err
+		}
+		if ind == 0 {
+			uniqueRestaurant[resId.Id] = true
+			continue
+		}
+		if _, ok := uniqueRestaurant[resId.Id]; !ok {
+			r.Reser.DeleteReservation(resp)
+			log.Fatalf("Faqat bitta restaurantning taomlarini zakas qila olasiz")
+			return nil, err
+		}
+	}
+
+	for _, meal := range meals.Meals {
+		_, err := r.OrderMeal(ctx, &pb.Order{
+			MenuItemId:   meal.MealId,
+			ReservatinId: resp.Id,
+			Quantity:     int32(meal.Quality),
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return resp, nil
