@@ -56,7 +56,7 @@ func TestGetAllReservation(t *testing.T) {
 	defer db.Close()
 	repo := NewReservationRepo(db)
 
-	_, err := repo.GetAllReservation()
+	_, err := repo.GetAllReservation(&pb.FilterField{})
 	if err != nil {
 		t.Error(err)
 	}

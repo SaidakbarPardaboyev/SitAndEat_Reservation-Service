@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RestaurantClient interface {
 	CreateRestaurant(ctx context.Context, in *Restuarant, opts ...grpc.CallOption) (*Status, error)
-	GetAllRestaurants(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Restuanants, error)
+	GetAllRestaurants(ctx context.Context, in *FilterField, opts ...grpc.CallOption) (*Restuanants, error)
 	GetRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*GetRes, error)
 	UpdateRestuarant(ctx context.Context, in *RestuarantUpdate, opts ...grpc.CallOption) (*Status, error)
 	DeleteRestuarant(ctx context.Context, in *RestuanantId, opts ...grpc.CallOption) (*Status, error)
@@ -46,7 +46,7 @@ func (c *restaurantClient) CreateRestaurant(ctx context.Context, in *Restuarant,
 	return out, nil
 }
 
-func (c *restaurantClient) GetAllRestaurants(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Restuanants, error) {
+func (c *restaurantClient) GetAllRestaurants(ctx context.Context, in *FilterField, opts ...grpc.CallOption) (*Restuanants, error) {
 	out := new(Restuanants)
 	err := c.cc.Invoke(ctx, "/restaurant.restaurant/GetAllRestaurants", in, out, opts...)
 	if err != nil {
@@ -87,7 +87,7 @@ func (c *restaurantClient) DeleteRestuarant(ctx context.Context, in *RestuanantI
 // for forward compatibility
 type RestaurantServer interface {
 	CreateRestaurant(context.Context, *Restuarant) (*Status, error)
-	GetAllRestaurants(context.Context, *Filter) (*Restuanants, error)
+	GetAllRestaurants(context.Context, *FilterField) (*Restuanants, error)
 	GetRestuarant(context.Context, *RestuanantId) (*GetRes, error)
 	UpdateRestuarant(context.Context, *RestuarantUpdate) (*Status, error)
 	DeleteRestuarant(context.Context, *RestuanantId) (*Status, error)
@@ -101,7 +101,7 @@ type UnimplementedRestaurantServer struct {
 func (UnimplementedRestaurantServer) CreateRestaurant(context.Context, *Restuarant) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRestaurant not implemented")
 }
-func (UnimplementedRestaurantServer) GetAllRestaurants(context.Context, *Filter) (*Restuanants, error) {
+func (UnimplementedRestaurantServer) GetAllRestaurants(context.Context, *FilterField) (*Restuanants, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllRestaurants not implemented")
 }
 func (UnimplementedRestaurantServer) GetRestuarant(context.Context, *RestuanantId) (*GetRes, error) {
@@ -145,7 +145,7 @@ func _Restaurant_CreateRestaurant_Handler(srv interface{}, ctx context.Context, 
 }
 
 func _Restaurant_GetAllRestaurants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Filter)
+	in := new(FilterField)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func _Restaurant_GetAllRestaurants_Handler(srv interface{}, ctx context.Context,
 		FullMethod: "/restaurant.restaurant/GetAllRestaurants",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RestaurantServer).GetAllRestaurants(ctx, req.(*Filter))
+		return srv.(RestaurantServer).GetAllRestaurants(ctx, req.(*FilterField))
 	}
 	return interceptor(ctx, in, info, handler)
 }

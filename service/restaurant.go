@@ -34,7 +34,7 @@ func (s *RestaurantService) CreateRestaurant(ctx context.Context, req *pb.Restua
 	return resp, nil
 }
 
-func (s *RestaurantService) GetAllRestaurants(ctx context.Context, req *pb.Void) (*pb.Restuanants, error) {
+func (s *RestaurantService) GetAllRestaurants(ctx context.Context, req *pb.FilterField) (*pb.Restuanants, error) {
 	resp, err := s.Reser.GetAllRestaurants(req)
 	if err != nil {
 		s.Looger.Error(fmt.Sprintf("Error getting all restaurants: %v", err))

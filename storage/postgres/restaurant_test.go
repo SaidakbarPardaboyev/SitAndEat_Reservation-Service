@@ -47,7 +47,7 @@ func TestGetAllRestaurants(t *testing.T) {
 
 	repo := NewRestaurantRepo(db)
 
-	restaurants, err := repo.GetAllRestaurants(&pb.Void{})
+	restaurants, err := repo.GetAllRestaurants(&pb.FilterField{})
 	if err != nil {
 		t.Fatalf("Failed to get all restaurants: %v", err)
 	}

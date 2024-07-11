@@ -70,15 +70,15 @@ func (r *ReservationService) Createreservations(ctx context.Context, req *pb.Req
 			Quantity:     int32(meal.Quality),
 		})
 		if err != nil {
-			r.Logger.Error(err)
+			r.Logger.Error(err.Error())
 		}
 	}
 
 	return resp, nil
 }
 
-func (r *ReservationService) GetAllReservations(ctx context.Context, req *pb.Void) (*pb.Reservations, error) {
-	resp, err := r.Reser.GetAllReservation()
+func (r *ReservationService) GetAllReservations(ctx context.Context, req *pb.FilterField) (*pb.Reservations, error) {
+	resp, err := r.Reser.GetAllReservation(req)
 	if err != nil {
 		r.Logger.Error(fmt.Sprintf("Malumotlarni olishda xatolik: %v", err))
 		return nil, err

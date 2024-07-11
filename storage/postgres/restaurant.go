@@ -3,6 +3,8 @@ package postgres
 import (
 	"database/sql"
 	pb "reservation/genproto/restaurant"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -85,16 +87,50 @@ func (r *NewRestaurant) CreateRestaurant(restaurant *pb.Restuarant) (*pb.Status,
 	return &pb.Status{Status: true}, nil
 }
 
-func (r *NewRestaurant) GetAllRestaurants(req *pb.Void) (*pb.Restuanants, error) {
+func (r *NewRestaurant) GetAllRestaurants(field *pb.FilterField) (*pb.Restuanants, error) {
+
 	query := `
-		SELECT 
-			id, name, address, phone_number, description, created_at,
-			updated_at
-		FROM 
-			restaurants
-		WHERE
-			deleted_at IS NULL`
-	rows, err := r.Db.Query(query)
+		  SELECT 
+			* 
+		  FROM 
+			Restaurants
+		  WHERE 
+			deleted_at is null`
+	param := []string{}
+	arr := []interface{}{}
+
+	if len(field.Name) > 0 {
+		query += " and name = :name"
+		param = append(param, ":name")
+		arr = append(arr, field.Name)
+	}
+
+	if len(field.Address) > 0 {
+		query += " and address = :address"
+		param = append(param, ":address")
+		arr = append(arr, field.Address)
+	}
+
+	if len(field.CreatedAt) > 0 {
+		data := strings.Split(field.CreatedAt, "-")
+		query += " and created_at BETWEEN :created_at1 and :created_at2"
+		param = append(param, ":created_at1", ":created_at2")
+		arr = append(arr, data[0], data[1])
+	}
+
+	if len(field.Limit) > 0 {
+		query += " limit " + field.Limit
+	}
+
+	if len(field.Offset) > 0 {
+		query += " offset " + field.Offset
+	}
+
+	for k, v := range param {
+		query = strings.Replace(query, v, "$"+strconv.Itoa(k+1), 1)
+	}
+
+	rows, err := r.Db.Query(query, arr...)
 	if err != nil {
 		return &pb.Restuanants{}, err
 	}
