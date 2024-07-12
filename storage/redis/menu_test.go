@@ -23,7 +23,7 @@ func Test(t *testing.T) {
 func TestGetMeals(t *testing.T) {
 	redisclient := NewRedisClient()
 	client := NewMenuRedisClient(redisclient)
-	_, err := client.GetMeals(context.Background())
+	_, err := client.GetMeals(context.Background(), &pb.Void{})
 	if err != nil {
 		t.Error(err)
 	}
