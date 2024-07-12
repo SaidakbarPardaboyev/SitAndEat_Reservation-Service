@@ -33,7 +33,7 @@ func (m *Menu) CreateFood(food *menu.CreateF) (*menu.Status, error) {
 func (m *Menu) GetAllFoods() (*menu.Foods, error) {
 	query := `
 		SELECT
-			id, restuarant_id, name, description, price, image, created_at, 
+			id, restaurant_id, name, description, price, image, created_at, 
 			update_at
 		FROM
 			menu
@@ -70,7 +70,7 @@ func (m *Menu) GetAllFoods() (*menu.Foods, error) {
 func (m *Menu) GetFood(food *menu.FoodId) (*menu.Food, error) {
 	query := `
 		SELECT
-			id, restuarant_id, name, description, price, image, created_at, 
+			id, restaurant_id, name, description, price, image, created_at, 
 			update_at
 		FROM
 			menu

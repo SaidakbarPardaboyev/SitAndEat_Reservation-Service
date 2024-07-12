@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS restaurants(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     name varchar not null,
@@ -8,7 +7,7 @@ CREATE TABLE IF NOT EXISTS restaurants(
     created_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp,
     deleted_at timestamp
-)
+);
 
 CREATE TYPE Stat AS ENUM ('rejected', 'confirmed', 'active');
 
@@ -17,11 +16,11 @@ CREATE TABLE IF NOT EXISTS reservations(
     user_id uuid,
     restaurant_id uuid,
     reservation_time timestamp default current_timestamp,
-    status Stat,
+    status Stat default 'confirmed',
     created_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp,
     deleted_at timestamp
-)
+);
 
 CREATE TABLE IF NOT EXISTS reservation_orders(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -31,7 +30,7 @@ CREATE TABLE IF NOT EXISTS reservation_orders(
     created_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp,
     deleted_at timestamp
-)
+);
 
 CREATE TABLE IF NOT EXISTS menu(
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -43,4 +42,4 @@ CREATE TABLE IF NOT EXISTS menu(
     created_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp,
     deleted_at timestamp
-)
+);

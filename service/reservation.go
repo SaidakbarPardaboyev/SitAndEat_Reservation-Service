@@ -58,7 +58,7 @@ func (r *ReservationService) Createreservations(ctx context.Context, req *pb.Req
 		}
 		if _, ok := uniqueRestaurant[resId.Id]; !ok {
 			r.Reser.DeleteReservation(resp)
-			r.Logger.Error(fmt.Sprintf("Faqat bitta restaurantning taomlarini zakas qila olasiz"))
+			r.Logger.Error(fmt.Sprintf("Faqat bitta restaurantning taomlarini zakas qila olasiz: %v", err))
 			return nil, err
 		}
 	}

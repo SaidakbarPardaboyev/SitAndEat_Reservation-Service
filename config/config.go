@@ -27,9 +27,9 @@ func Load() Config {
 	config.DB_PORT = cast.ToString(Coalesce("DB_PORT", "5432"))
 	config.DB_USER = cast.ToString(Coalesce("DB_USER", "postgres"))
 	config.DB_PASSWORD = cast.ToString(Coalesce("DB_PASSWORD", "hamidjon4424"))
-	config.DB_NAME = cast.ToString(Coalesce("DB_NAME", "resuserservice"))
+	config.DB_NAME = cast.ToString(Coalesce("DB_NAME", "restaurant"))
 	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", "50051"))
-	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", "6666"))
+	config.RESERVATION_SERVICE = cast.ToString(Coalesce("RESERVATION_SERVICE", ":6666"))
 
 	return config
 }
