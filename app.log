@@ -37,3 +37,6 @@ time=2024-07-12T13:35:31.983+05:00 level=ERROR msg="Malumotlarni update qilishda
 time=2024-07-12T15:36:09.129+05:00 level=ERROR msg="Order service da xatolik: pq: INSERT has more expressions than target columns"
 time=2024-07-12T15:40:34.138+05:00 level=ERROR msg="Payment service da xatolik: pq: relation \"reservation_payments\" does not exist"
 time=2024-07-12T15:40:35.179+05:00 level=ERROR msg="Payment service da xatolik: pq: relation \"reservation_payments\" does not exist"
+time=2024-07-12T17:33:45.818+05:00 level=ERROR msg="Malumotlarni olishda xatolik: pq: relation \"reservation\" does not exist"
+time=2024-07-12T17:35:32.910+05:00 level=ERROR msg="Malumotlarni olishda xatolik: sql: expected 8 destination arguments in Scan, not 7"
+time=2024-07-12T17:38:49.960+05:00 level=ERROR msg="Malumotlarni olishda xatolik: pq: column \"updated_at\" does not exist"
