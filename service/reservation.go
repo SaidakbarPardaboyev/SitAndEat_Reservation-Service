@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	pbM "reservation/genproto/menu"
+	"reservation/genproto/menuRedis"
 	pb "reservation/genproto/resirvation"
 	"reservation/pkg/logger"
 	"reservation/storage/postgres"
@@ -39,7 +40,7 @@ func (r *ReservationService) Createreservations(ctx context.Context, req *pb.Req
 		return nil, err
 	}
 
-	meals, err := r.MenuRedis.GetMeals(ctx)
+	meals, err := r.MenuRedis.GetMeals(ctx, &menuRedis.Void{})
 	if err != nil {
 		r.Logger.Error(fmt.Sprintf("Malumotlarni insert qilishda xatolik: %v", err))
 		return nil, err
