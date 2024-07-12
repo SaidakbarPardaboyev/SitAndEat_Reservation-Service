@@ -59,11 +59,12 @@ func (r *Reservation) GetAllReservation(field *pb.FilterField) (*pb.Reservations
 
 	query := `
 		SELECT 
-		  * 
+			id, user_id, restaurant_id, reservation_time, 
+			status, created_at, update_at
 		FROM 
-		  Reservation 
+		  	Reservations 
 		WHERE 
-		  deleted_at is null`
+		  	deleted_at is null`
 	param := []string{}
 	arr := []interface{}{}
 
