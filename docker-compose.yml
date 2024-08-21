@@ -1,5 +1,4 @@
 services:
-
   postgres2:
     image: postgres:latest
     container_name: postgres2
@@ -21,7 +20,7 @@ services:
       - restaurant
     volumes:
       - ./migrations:/migrations
-    command: ["-path", "/migrations", "-database", "postgres://postgres2:hamidjon4424@postgres:5432/restaurant?sslmode=disable", "up"]
+    command: ["-path", "/migrations", "-database", "postgres://postgres:hamidjon4424@postgres2:5432/restaurant?sslmode=disable", "up"]
     depends_on:
       - postgres2
 
@@ -34,8 +33,6 @@ services:
       - redis-data:/data
     networks:
       - restaurant
-
-
 
   reservation-service:
     build: .
