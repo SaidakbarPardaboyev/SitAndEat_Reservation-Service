@@ -5,14 +5,13 @@ import (
 	pb "reservation/genproto/menuRedis"
 	"strconv"
 
-	"reservation/genproto/menuRedis"
 
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/net/context"
 )
 
 type MenuRedisClient struct {
-	menuRedis.UnimplementedMenuServer
+	pb.UnimplementedMenuServer
 	Redis *redis.Client
 }
 
@@ -31,7 +30,7 @@ func (m *MenuRedisClient) CretaeMeal(ctx context.Context, meal *pb.MealCreate) (
 	return &pb.Status{Status: true}, nil
 }
 
-func (m *MenuRedisClient) GetMeals(ctx context.Context, req *menuRedis.Void) (*pb.Meals, error) {
+func (m *MenuRedisClient) GetMeals(ctx context.Context, req *pb.Void) (*pb.Meals, error) {
 	orders, err := m.Redis.HGetAll(ctx, "orders").Result()
 	if err != nil {
 		return nil, err
